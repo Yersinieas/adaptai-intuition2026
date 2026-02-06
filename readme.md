@@ -22,6 +22,8 @@
 
 **📦 GitHub Repository**: https://github.com/Yersinieas/adaptai-intuition2026
 
+**💻 Slide Deck**: https://docs.google.com/presentation/d/1waIP8dkbSyCUtjQr82GBwd-bIOu2yZjkWmRIXPyinzc/edit?usp=sharing
+
 **📄 Google Docs**: https://docs.google.com/document/d/1FKgKRKY9uiC3hD0ETlRQwAb-qXRfyhHPDiBJvoCZ2ZE/edit?usp=sharing
 
 ---
