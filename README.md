@@ -19,7 +19,6 @@ AdaptAI is a revolutionary accessibility widget built for the **iNTUition 2026 I
 ## 📄 Key Documents
 
 - [**Full Submission Details**](SUBMISSION.md)
-- [**Pitch Slides (Markdown)**](PITCH_SLIDES.md)
 
 ## 🎯 The Vision
 
