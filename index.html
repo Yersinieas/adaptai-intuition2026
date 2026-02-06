@@ -5,218 +5,386 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AdaptAI - Universal Accessibility Widget | iNTUition 2026</title>
     <style>
-        * {margin:0;padding:0;box-sizing:border-box}
-        body {font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
-        .demo-container {max-width:1200px;width:100%;background:white;border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,0.3);overflow:hidden}
-        .header {background:linear-gradient(135deg,#667eea,#764ba2);color:white;padding:30px;text-align:center}
-        .header h1 {font-size:2.5em;margin-bottom:10px}
-        .header p {font-size:1.1em;opacity:0.9}
-        .main-content {display:flex;min-height:600px}
-        .demo-section {flex:1;padding:30px;border-right:1px solid #eee}
-        .widget-section {flex:1;padding:30px;background:#f8f9fa}
-        .demo-app {background:#fff;border:2px solid #ddd;border-radius:10px;padding:20px;margin-bottom:20px}
-        .bus-header {background:#667eea;color:white;padding:15px;border-radius:8px 8px 0 0;font-size:1.2em;font-weight:bold}
-        .bus-tabs {display:flex;background:#f1f3f4;border-bottom:2px solid #ddd}
-        .tab {flex:1;padding:12px;text-align:center;cursor:pointer;transition:0.3s;border-bottom:3px solid transparent}
-        .tab:hover {background:#e8eaed}
-        .tab.active {border-bottom-color:#667eea;background:white;font-weight:bold}
-        .bus-content {background:white;padding:20px;min-height:300px}
-        .search-box {width:100%;padding:12px;border:2px solid #667eea;border-radius:8px;font-size:1em;margin-bottom:15px}
-        .bus-stop-list {list-style:none}
-        .bus-stop {padding:12px;margin:8px 0;background:#f8f9fa;border-radius:6px;cursor:pointer;transition:0.3s}
-        .bus-stop:hover {background:#e8eaed;transform:translateX(5px)}
-        .route-card {background:linear-gradient(135deg,#667eea,#764ba2);color:white;padding:15px;border-radius:8px;margin:10px 0}
-        .widget-fab {position:fixed;bottom:30px;right:30px;width:60px;height:60px;border-radius:50%;background:#667eea;color:white;border:none;font-size:24px;cursor:pointer;box-shadow:0 4px 12px rgba(102,126,234,0.4);transition:0.3s;z-index:1000}
-        .widget-fab:hover {transform:scale(1.1);box-shadow:0 6px 20px rgba(102,126,234,0.6)}
-        .intent-modal {display:none;position:fixed;bottom:100px;right:30px;width:350px;background:white;border-radius:15px;box-shadow:0 10px 40px rgba(0,0,0,0.3);padding:20px;z-index:1001}
-        .intent-modal.active {display:block;animation:slideUp 0.3s}
-        @keyframes slideUp {from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
-        .intent-header {font-size:1.2em;font-weight:bold;margin-bottom:15px;color:#667eea}
-        .intent-buttons {display:flex;flex-direction:column;gap:10px}
-        .intent-btn {padding:12px;border:2px solid #667eea;background:white;color:#667eea;border-radius:8px;cursor:pointer;transition:0.3s;font-weight:500}
-        .intent-btn:hover {background:#667eea;color:white}
-        .intent-btn.active {background:#667eea;color:white}
-        .metrics-panel {background:linear-gradient(135deg,#f093fb,#f5576c);color:white;padding:20px;border-radius:10px;margin-top:20px}
-        .metric-row {display:flex;justify-content:space-between;margin:10px 0;padding:10px;background:rgba(255,255,255,0.2);border-radius:6px}
-        .metric-label {font-weight:500}
-        .independence-value {font-size:1.8em;font-weight:bold}
-        .ai-suggestions {background:#fff3cd;border-left:4px solid #ffc107;padding:15px;margin:10px 0;border-radius:6px}
-        .mode-toggle {display:flex;gap:10px;margin:15px 0}
-        .mode-btn {flex:1;padding:10px;border:2px solid #667eea;background:white;color:#667eea;border-radius:6px;cursor:pointer;transition:0.3s}
-        .mode-btn.active {background:#667eea;color:white}
+        :root { --primary: #667eea; --secondary: #764ba2; --accent: #f093fb; --success: #4caf50; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; overflow-x: hidden; }
+        .demo-container { max-width: 1200px; width: 100%; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; display: flex; flex-direction: column; }
+        .header { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        .header p { font-size: 1.1em; opacity: 0.9; }
+        .main-content { display: flex; flex: 1; min-height: 600px; }
+        .demo-section { flex: 1.2; padding: 30px; border-right: 1px solid #eee; }
+        .widget-section { flex: 0.8; padding: 30px; background: #f8f9fa; }
+        
+        /* Bus App Demo Styles */
+        .demo-app { background: #fff; border: 2px solid #ddd; border-radius: 12px; padding: 0; margin-bottom: 20px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .bus-header { background: var(--primary); color: white; padding: 15px; font-size: 1.2em; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
+        .bus-tabs { display: flex; background: #f1f3f4; border-bottom: 1px solid #ddd; }
+        .tab { flex: 1; padding: 12px; text-align: center; cursor: pointer; transition: 0.3s; border-bottom: 3px solid transparent; font-weight: 500; }
+        .tab:hover { background: #e8eaed; }
+        .tab.active { border-bottom-color: var(--primary); background: white; color: var(--primary); }
+        .bus-content { background: white; padding: 20px; min-height: 350px; }
+        .search-box { width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1em; margin-bottom: 15px; transition: 0.3s; }
+        .search-box:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px rgba(102,126,234,0.1); }
+        .bus-stop-list { list-style: none; }
+        .bus-stop { padding: 15px; margin: 8px 0; background: #f8f9fa; border-radius: 8px; cursor: pointer; transition: 0.3s; display: flex; justify-content: space-between; align-items: center; border: 1px solid transparent; }
+        .bus-stop:hover, .bus-stop:focus { background: #e3f2fd; transform: translateX(5px); border-color: var(--primary); outline: none; }
+        .bus-stop .time { font-weight: bold; color: var(--primary); }
+        
+        /* AdaptAI Widget Styles */
+        .widget-fab { position: fixed; bottom: 30px; right: 30px; width: 70px; height: 70px; border-radius: 50%; background: var(--primary); color: white; border: none; font-size: 30px; cursor: pointer; box-shadow: 0 6px 20px rgba(102,126,234,0.4); transition: 0.3s; z-index: 1000; display: flex; align-items: center; justify-content: center; }
+        .widget-fab:hover { transform: scale(1.1); box-shadow: 0 8px 25px rgba(102,126,234,0.6); }
+        .widget-fab.listening { background: #f44336; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(244,67,54,0.7); } 70% { transform: scale(1.1); box-shadow: 0 0 0 15px rgba(244,67,54,0); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(244,67,54,0); } }
+
+        .intent-modal { display: none; position: fixed; bottom: 110px; right: 30px; width: 380px; background: white; border-radius: 20px; box-shadow: 0 15px 50px rgba(0,0,0,0.3); padding: 25px; z-index: 1001; border: 1px solid #eee; }
+        .intent-modal.active { display: block; animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes slideUp { from { transform: translateY(30px) scale(0.9); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
+        .intent-header { font-size: 1.3em; font-weight: bold; margin-bottom: 20px; color: var(--primary); display: flex; align-items: center; gap: 10px; }
+        .intent-buttons { display: flex; flex-direction: column; gap: 12px; }
+        .intent-btn { padding: 15px; border: 2px solid #eef2f7; background: #f8fafc; color: #334155; border-radius: 12px; cursor: pointer; transition: 0.2s; font-weight: 600; text-align: left; display: flex; align-items: center; gap: 12px; }
+        .intent-btn:hover, .intent-btn:focus { background: var(--primary); color: white; border-color: var(--primary); transform: translateY(-2px); }
+        .intent-btn span { font-size: 1.4em; }
+
+        .ai-suggestions { background: #fff9db; border-left: 5px solid #fab005; padding: 18px; margin: 15px 0; border-radius: 8px; position: relative; }
+        .ai-suggestions .why-badge { position: absolute; top: -10px; right: 10px; background: #fab005; color: white; font-size: 0.7em; padding: 3px 8px; border-radius: 10px; font-weight: bold; }
+        .ai-suggestions.hesitating { animation: shake 0.5s; border-left-color: #f44336; background: #ffebee; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+
+        .metrics-panel { background: linear-gradient(135deg, #f093fb, #f5576c); color: white; padding: 25px; border-radius: 15px; margin-top: 20px; box-shadow: 0 8px 20px rgba(245,87,108,0.3); }
+        .metric-row { display: flex; justify-content: space-between; margin: 12px 0; padding: 12px; background: rgba(255,255,255,0.15); border-radius: 10px; align-items: center; }
+        .metric-label { font-weight: 500; font-size: 0.9em; opacity: 0.9; }
+        .metric-value { font-weight: bold; font-size: 1.1em; }
+        .independence-score { text-align: center; margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.3); }
+        .score-large { font-size: 2.8em; font-weight: 800; display: block; }
+
+        .mode-toggle { display: flex; gap: 12px; margin-bottom: 25px; }
+        .mode-btn { flex: 1; padding: 12px; border: 2px solid var(--primary); background: white; color: var(--primary); border-radius: 10px; cursor: pointer; transition: 0.3s; font-weight: bold; }
+        .mode-btn.active { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(102,126,234,0.3); }
+
+        .voice-status { display: none; margin-top: 10px; font-size: 0.9em; color: #f44336; font-weight: bold; align-items: center; gap: 5px; }
+        .voice-status.active { display: flex; }
+        
+        /* Accessibility Overlays */
+        .keyboard-hint { display: none; position: absolute; background: #333; color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; z-index: 10; }
+        body.keyboard-mode .keyboard-hint { display: block; }
+        
+        [data-intent]:focus { outline: 4px solid var(--accent) !important; outline-offset: 4px; }
     </style>
 </head>
-<body>
+<body onclick="trackHesitation()">
     <div class="demo-container">
         <div class="header">
-            <h1>🚍 AdaptAI Widget - Live Demo</h1>
-            <p>Universal AI-Powered Adaptive Accessibility | iNTUition 2026 IEEE Hackathon</p>
+            <h1>🚍 AdaptAI Widget - Full Multimodal Demo</h1>
+            <p>Independence by Design | Real-Time AI | iNTUition 2026 IEEE Hackathon</p>
         </div>
         
         <div class="main-content">
             <div class="demo-section">
-                <h2 style="margin-bottom:20px">Demo: Singapore Bus App</h2>
-                
-                <div class="demo-app">
-                    <div class="bus-header">🚍 SG Bus Timings</div>
+                <div class="mode-toggle">
+                    <button id="btnIndependent" class="mode-btn active" onclick="setMode('independent')">Independent Mode (Default)</button>
+                    <button id="btnAssisted" class="mode-btn" onclick="setMode('assisted')">Assisted Mode (Optional)</button>
+                </div>
+
+                <div class="demo-app" id="demoApp">
+                    <div class="bus-header">
+                        <span>🚍 SG Bus Arrival</span>
+                        <small id="lastUpdated">Live 🟢</small>
+                    </div>
                     <div class="bus-tabs">
-                        <div class="tab active" onclick="switchTab(0)">Bus Stops</div>
-                        <div class="tab" onclick="switchTab(1)">Routes</div>
-                        <div class="tab" onclick="switchTab(2)">Favorites</div>
+                        <div class="tab active" data-intent="tab-stops" tabindex="0" onclick="switchTab(0)">Bus Stops</div>
+                        <div class="tab" data-intent="tab-routes" tabindex="0" onclick="switchTab(1)">Routes</div>
+                        <div class="tab" data-intent="tab-favs" tabindex="0" onclick="switchTab(2)">Favorites</div>
                     </div>
                     <div class="bus-content">
-                        <input type="text" class="search-box" placeholder="Search bus stop..." id="searchBox">
-                        <ul class="bus-stop-list" id="busStopList">
-                            <li class="bus-stop" onclick="selectStop(this)">Opp Blk 123 - 15s away</li>
-                            <li class="bus-stop" onclick="selectStop(this)">Jurong East Int - 2 min</li>
-                            <li class="bus-stop" onclick="selectStop(this)">Clementi MRT - 5 min</li>
-                            <li class="bus-stop" onclick="selectStop(this)">NTU North Spine - 8 min</li>
-                            <li class="bus-stop" onclick="selectStop(this)">Pioneer MRT - 12 min</li>
-                        </ul>
-                        <div id="routeDetails" style="display:none">
-                            <div class="route-card">
-                                <strong>Bus 179</strong><br>
-                                Next: 3 min • Seats Available: 🟢
-                            </div>
-                            <div class="route-card">
-                                <strong>Bus 199</strong><br>
-                                Next: 7 min • Seats Available: 🟡
-                            </div>
+                        <input type="text" class="search-box" placeholder="Search bus stop... (Try 'NTU' or 'MRT')" id="searchBox" data-intent="search">
+                        <div id="busStopsView">
+                            <ul class="bus-stop-list" id="busStopList">
+                                <li class="bus-stop" tabindex="0" onclick="selectItem('NTU North Spine')">
+                                    <span>NTU North Spine</span>
+                                    <span class="time">3 min</span>
+                                </li>
+                                <li class="bus-stop" tabindex="0" onclick="selectItem('Pioneer MRT')">
+                                    <span>Pioneer MRT</span>
+                                    <span class="time">8 min</span>
+                                </li>
+                                <li class="bus-stop" tabindex="0" onclick="selectItem('Boon Lay Int')">
+                                    <span>Boon Lay Int</span>
+                                    <span class="time">12 min</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div id="routesView" style="display:none; padding:10px; color:#666; text-align:center;">
+                            Select a bus stop to view routes.
                         </div>
                     </div>
                 </div>
 
-                <div class="ai-suggestions">
-                    <strong>💡 AI Detected Intent:</strong> "Find fastest bus to NTU"<br>
-                    <small>Confidence: 94% | Latency: 45ms</small>
+                <div class="ai-suggestions" id="aiSuggestions">
+                    <span class="why-badge">AI REASONING</span>
+                    <strong>💡 Detected Intent:</strong> <span id="intentText">Exploring app</span>
+                    <p id="intentExplanation" style="font-size: 0.85em; margin-top: 5px; color: #665c00;">Awaiting interaction to personalize adaptation...</p>
                 </div>
             </div>
 
             <div class="widget-section">
-                <h2 style="margin-bottom:20px">AdaptAI Controls</h2>
-                
-                <div class="mode-toggle">
-                    <button class="mode-btn active" onclick="toggleMode('independent')">Independent Mode</button>
-                    <button class="mode-btn" onclick="toggleMode('assisted')">Assisted Mode</button>
-                </div>
-
-                <div class="metrics-panel" id="metricsPanel">
-                    <h3 style="margin-bottom:15px">📊 Real-Time Metrics</h3>
-                    <div class="metric-row">
-                        <span class="metric-label">Task Intent</span>
-                        <span>Find Bus Route</span>
-                    </div>
+                <div class="metrics-panel">
+                    <h3 style="margin-bottom:15px; display:flex; align-items:center; gap:10px;">📊 Impact Dashboard</h3>
                     <div class="metric-row">
                         <span class="metric-label">AI Confidence</span>
-                        <span id="confidenceValue">94%</span>
+                        <span class="metric-value" id="confVal">--%</span>
                     </div>
                     <div class="metric-row">
                         <span class="metric-label">Response Latency</span>
-                        <span id="latencyValue">45ms</span>
+                        <span class="metric-value" id="latVal">--ms</span>
                     </div>
-                    <div class="metric-row highlight" style="background:rgba(255,255,255,0.3);margin-top:15px">
-                        <span class="metric-label">Independence Score</span>
-                        <span class="independence-value" id="independenceValue">92%</span>
+                    <div class="metric-row">
+                        <span class="metric-label">Hesitation Level</span>
+                        <span class="metric-value" id="hesVal">Low</span>
                     </div>
-                    <div style="margin-top:15px;font-size:0.9em">
-                        <strong>Tasks Completed:</strong> 8/10 independently<br>
-                        <strong>Interventions:</strong> 2 (User Override)
+                    <div class="independence-score">
+                        <span class="metric-label">INDEPENDENCE SCORE</span>
+                        <span class="score-large" id="indScore">92%</span>
+                        <p style="font-size:0.8em; margin-top:5px; opacity:0.9;">End-to-end tasks without assistance</p>
                     </div>
                 </div>
 
-                <div style="margin-top:20px;padding:15px;background:white;border-radius:8px">
-                    <h3 style="margin-bottom:10px">🎯 Key Features</h3>
-                    <ul style="padding-left:20px">
-                        <li>✅ Real-time AI Intent Detection</li>
-                        <li>✅ Independent Mode (No Helper Default)</li>
-                        <li>✅ Task-Level Adaptation</li>
-                        <li>✅ Multimodal Input (Voice/Touch/Gesture)</li>
-                        <li>✅ &lt;50ms Latency Performance</li>
-                        <li>✅ Independence Scoring System</li>
+                <div style="margin-top:20px; padding:20px; background:white; border-radius:15px; border:1px solid #eee;">
+                    <h4 style="margin-bottom:12px; color: var(--primary);">🎛️ Multimodal Controls</h4>
+                    <ul style="list-style:none; font-size:0.9em; line-height:1.8;">
+                        <li>🎤 <strong>Voice:</strong> Click ♿ then say "NTU" or "Timings"</li>
+                        <li>⌨️ <strong>Keyboard:</strong> Use Tab/Enter to navigate</li>
+                        <li>🖱️ <strong>Hesitation:</strong> AI detects delays > 5s</li>
+                        <li>⚡ <strong>Real-time:</strong> Intent prediction < 50ms</li>
                     </ul>
+                    <div class="voice-status" id="voiceStatus">
+                        <span>🔴 LISTENING...</span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <button class="widget-fab" onclick="toggleWidget()">♿</button>
+    <button class="widget-fab" id="mainFab" onclick="toggleWidget()" title="Accessibility Widget (Voice/Menu)">♿</button>
 
     <div class="intent-modal" id="intentModal">
-        <div class="intent-header">🎤 Select Your Intent</div>
+        <div class="intent-header"><span>🎤</span> Voice & Intent Control</div>
+        <p style="font-size:0.85em; margin-bottom:15px; color:#666;">Say a command or select your intent:</p>
         <div class="intent-buttons">
-            <button class="intent-btn" onclick="selectIntent('Find bus stop')">🚏 Find Bus Stop</button>
-            <button class="intent-btn" onclick="selectIntent('Check arrival time')">⏰ Check Arrival Time</button>
-            <button class="intent-btn" onclick="selectIntent('Plan route')">🗺️ Plan Route</button>
-            <button class="intent-btn" onclick="selectIntent('Save favorite')">⭐ Save Favorite</button>
+            <button class="intent-btn" onclick="executeIntent('check_timings')"><span>⏰</span> Check Arrival Times</button>
+            <button class="intent-btn" onclick="executeIntent('find_route')"><span>🗺️</span> Find Best Route</button>
+            <button class="intent-btn" onclick="executeIntent('search_ntu')"><span>🏫</span> Go to NTU Stops</button>
+            <button class="intent-btn" onclick="executeIntent('emergency')"><span>🚨</span> Emergency Assistance</button>
         </div>
+        <button onclick="startVoice()" style="width:100%; margin-top:15px; padding:12px; background:#f44336; color:white; border:none; border-radius:10px; font-weight:bold; cursor:pointer;">🎤 Start Voice Command</button>
     </div>
 
     <script>
-        let independenceScore = 92;
-        let tasksCompleted = 8;
-        let modalOpen = false;
+        // State Management
+        let state = {
+            mode: 'independent',
+            confidence: 94,
+            independenceScore: 92,
+            lastInteraction: Date.now(),
+            hesitationCount: 0,
+            tasksTotal: 12,
+            tasksIndependent: 11,
+            isListening: false
+        };
+
+        // 1. Real-Time Performance & Latency Measurement
+        function trackLatency(callback) {
+            const start = performance.now();
+            callback();
+            const end = performance.now();
+            const latency = Math.round(end - start + (Math.random() * 5)); // Add small simulated network jitter
+            document.getElementById('latVal').textContent = latency + 'ms';
+            return latency;
+        }
+
+        // 2. Supervised AI Intent Prediction (Keyword Based)
+        function predictIntent(input) {
+            trackLatency(() => {
+                const text = input.toLowerCase();
+                let intent = "Exploring app";
+                let explanation = "Monitoring navigation patterns to anticipate next step.";
+                let conf = 85;
+
+                if (text.includes('ntu')) {
+                    intent = "Find NTU Transport";
+                    explanation = "Detected campus keywords. Prioritizing university routes.";
+                    conf = 98;
+                } else if (text.includes('mrt') || text.includes('station')) {
+                    intent = "Locate Train Connection";
+                    explanation = "Hub-focused search. Highlighting interchange stops.";
+                    conf = 96;
+                } else if (text.includes('home') || text.includes('fav')) {
+                    intent = "View Favorites";
+                    explanation = "User seeking frequent locations. Suggesting Starred list.";
+                    conf = 92;
+                }
+
+                document.getElementById('intentText').textContent = intent;
+                document.getElementById('intentExplanation').textContent = explanation;
+                document.getElementById('confVal').textContent = conf + '%';
+                
+                // Supervised AI: Boost confidence on successful matches
+                state.confidence = conf;
+            });
+        }
+
+        // 3. Independence Score Calculation
+        function updateIndependence(isAssisted) {
+            state.tasksTotal++;
+            if (!isAssisted) state.tasksIndependent++;
+            
+            state.independenceScore = Math.round((state.tasksIndependent / state.tasksTotal) * 100);
+            document.getElementById('indScore').textContent = state.independenceScore + '%';
+        }
+
+        // 4. Hesitation Detection (Real-Time Monitoring)
+        function trackHesitation() {
+            const now = Date.now();
+            const diff = (now - state.lastInteraction) / 1000;
+            state.lastInteraction = now;
+
+            if (diff > 5) { // Hesitation > 5 seconds
+                state.hesitationCount++;
+                document.getElementById('hesVal').textContent = "Detected";
+                document.getElementById('hesVal').style.color = "#f44336";
+                document.getElementById('aiSuggestions').classList.add('hesitating');
+                
+                // Real-time adaptation: Suggest help when stuck
+                document.getElementById('intentText').textContent = "Help Needed?";
+                document.getElementById('intentExplanation').textContent = "User paused for " + Math.round(diff) + "s. Suggesting Assisted Mode or Voice.";
+            } else {
+                document.getElementById('hesVal').textContent = "Low";
+                document.getElementById('hesVal').style.color = "white";
+                document.getElementById('aiSuggestions').classList.remove('hesitating');
+            }
+        }
+
+        // 5. Multimodal: Web Speech API Implementation
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        let recognition;
+        
+        if (SpeechRecognition) {
+            recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.lang = 'en-SG';
+
+            recognition.onstart = () => {
+                state.isListening = true;
+                document.getElementById('mainFab').classList.add('listening');
+                document.getElementById('voiceStatus').classList.add('active');
+            };
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                document.getElementById('searchBox').value = transcript;
+                predictIntent(transcript);
+                executeVoiceCommand(transcript);
+            };
+
+            recognition.onend = () => {
+                state.isListening = false;
+                document.getElementById('mainFab').classList.remove('listening');
+                document.getElementById('voiceStatus').classList.remove('active');
+            };
+        }
+
+        function startVoice() {
+            if (recognition) {
+                toggleWidget();
+                recognition.start();
+            } else {
+                alert("Speech recognition not supported in this browser.");
+            }
+        }
+
+        function executeVoiceCommand(cmd) {
+            const c = cmd.toLowerCase();
+            if (c.includes('ntu')) executeIntent('search_ntu');
+            if (c.includes('time')) executeIntent('check_timings');
+            if (c.includes('route')) executeIntent('find_route');
+        }
+
+        // UI Interactions
+        function setMode(mode) {
+            state.mode = mode;
+            document.getElementById('btnIndependent').classList.toggle('active', mode === 'independent');
+            document.getElementById('btnAssisted').classList.toggle('active', mode === 'assisted');
+            
+            if (mode === 'assisted') {
+                updateIndependence(true);
+                alert("Assisted Mode Enabled: Step-by-step guidance activated.");
+            }
+        }
 
         function toggleWidget() {
-            modalOpen = !modalOpen;
             document.getElementById('intentModal').classList.toggle('active');
         }
 
-        function selectIntent(intent) {
-            document.querySelector('.ai-suggestions strong').nextSibling.textContent = ' "' + intent + '"';
-            simulateAI();
-            toggleWidget();
-        }
-
-        function simulateAI() {
-            const confidence = Math.floor(Math.random() * 10) + 90;
-            const latency = Math.floor(Math.random() * 30) + 40;
-            document.getElementById('confidenceValue').textContent = confidence + '%';
-            document.getElementById('latencyValue').textContent = latency + 'ms';
-            
-            tasksCompleted++;
-            independenceScore = Math.min(98, independenceScore + 1);
-            document.getElementById('independenceValue').textContent = independenceScore + '%';
-        }
-
-        function switchTab(index) {
-            document.querySelectorAll('.tab').forEach((t, i) => {
-                t.classList.toggle('active', i === index);
+        function switchTab(idx) {
+            trackLatency(() => {
+                document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', i === idx));
+                document.getElementById('busStopsView').style.display = idx === 0 ? 'block' : 'none';
+                document.getElementById('routesView').style.display = idx === 1 ? 'block' : 'none';
+                predictIntent(idx === 1 ? 'routes' : 'stops');
             });
-            
-            if(index === 1) {
-                document.getElementById('busStopList').style.display = 'none';
-                document.getElementById('routeDetails').style.display = 'block';
-            } else {
-                document.getElementById('busStopList').style.display = 'block';
-                document.getElementById('routeDetails').style.display = 'none';
-            }
         }
 
-        function selectStop(element) {
-            document.querySelectorAll('.bus-stop').forEach(s => s.style.background = '#f8f9fa');
-            element.style.background = '#e3f2fd';
-            simulateAI();
+        function executeIntent(action) {
+            toggleWidget();
+            trackLatency(() => {
+                if (action === 'search_ntu') {
+                    document.getElementById('searchBox').value = "NTU";
+                    predictIntent("NTU");
+                    switchTab(0);
+                } else if (action === 'check_timings') {
+                    switchTab(0);
+                } else if (action === 'find_route') {
+                    switchTab(1);
+                }
+                updateIndependence(false);
+            });
         }
 
-        function toggleMode(mode) {
-            document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            if(mode === 'independent') {
-                document.querySelector('.ai-suggestions').innerHTML = '<strong>💡 AI Detected Intent:</strong> "Find fastest bus to NTU"<br><small>Confidence: 94% | Latency: 45ms</small>';
-            } else {
-                document.querySelector('.ai-suggestions').innerHTML = '<strong>🤝 Assisted Mode Active:</strong> Step-by-step guidance enabled<br><small>Click elements for help</small>';
-            }
+        function selectItem(name) {
+            trackLatency(() => {
+                alert("Selected: " + name + "\nAI predicting your next move...");
+                predictIntent(name);
+                updateIndependence(false);
+            });
         }
 
-        document.getElementById('searchBox').addEventListener('input', () => {
-            simulateAI();
+        // Keyboard Support
+        document.addEventListener('keydown', (e) => {
+            document.body.classList.add('keyboard-mode');
+            if (e.key === 'Escape') document.getElementById('intentModal').classList.remove('active');
         });
 
+        // Search Input Logic
+        document.getElementById('searchBox').addEventListener('input', (e) => {
+            predictIntent(e.target.value);
+        });
+
+        // Initial Metrics
+        setTimeout(() => {
+            document.getElementById('confVal').textContent = '94%';
+            document.getElementById('latVal').textContent = '42ms';
+        }, 500);
+
+        // Auto-update times
         setInterval(() => {
-            const times = document.querySelectorAll('.bus-stop');
-            times[0].textContent = 'Opp Blk 123 - ' + (Math.floor(Math.random() * 60)) + 's away';
-        }, 5000);
+            const times = document.querySelectorAll('.time');
+            times.forEach(t => {
+                let current = parseInt(t.textContent);
+                if (current > 1) t.textContent = (current - 1) + " min";
+                else t.textContent = "Arr";
+            });
+            document.getElementById('lastUpdated').textContent = "Live 🟢 " + new Date().toLocaleTimeString();
+        }, 30000);
     </script>
 </body>
 </html>
