@@ -44,6 +44,5 @@ Our demo integrates AdaptAI into a simulated Singapore Bus App, showing how it c
 
 ---
 Built with ❤️ by Team AdaptAI for iNTUition 2026.
-**
 
 
