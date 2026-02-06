@@ -22,6 +22,8 @@
 
 **📦 GitHub Repository**: https://github.com/Yersinieas/adaptai-intuition2026
 
+**📄 Google Docs**: https://docs.google.com/document/d/1FKgKRKY9uiC3hD0ETlRQwAb-qXRfyhHPDiBJvoCZ2ZE/edit?usp=sharing
+
 ---
 
 ## 💡 Innovation & Core Features
