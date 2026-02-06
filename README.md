@@ -30,8 +30,7 @@ Most accessibility tools default to \"assisted\" or \"helper\" modes, which can 
 - **Independence Scoring**: A unique metric to track and improve user autonomy.
 - **Hesitation Loop Detection**: Automatically triggers cognitive simplification when users are stuck.
 - **Motor Friction Mitigation**: Detects mis-taps and dynamically enlarges touch targets.
-- **Zero-Dependency**: Built with vanilla HTML/JS for maximum portability and speed (<50ms latency).
-
+  
 ## 🧠 How It Works (Multimodal Vision)
 
 While the demo uses a high-performance heuristic engine, our architecture is designed for:
